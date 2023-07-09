@@ -1,0 +1,1 @@
+{"max_steps": 100000, "replay_buffer_size": 10000, "batch_size": 128, "runner_steps": 10, "gamma": 0.995, "grad_repeats": 5, "alpha_lr": 0.001, "actor_lr": 0.001, "critic_lr": 0.002, "alpha": 1, "tau": 0.01, "render_every": 500, "print_every": 500, "save_path": "./experiments_data/sac_lunarlander/", "render": true, "hidden_size": [64, 64]}

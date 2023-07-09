@@ -1,5 +1,6 @@
 # Implementation of Soft-Actor-Critic (SAC)
-This repository consists of a basic experiment setup that can dynamically loading Gym environments and train SAC agents on them. The code is based on the [Soft-Actor-Critic](https://arxiv.org/abs/1801.01290).
+This repository consists of a basic framework that allows to easily load a Gym environment and optimize an agent using SAC.
+The SAC algorithm: [Soft-Actor-Critic](https://arxiv.org/abs/1801.01290).
 
 ## Installation
 The code is written in python 3.10 and uses the following packages:

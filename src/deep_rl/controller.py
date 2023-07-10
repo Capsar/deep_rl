@@ -31,6 +31,8 @@ class Controller:
             config_params (dict): A dictionary of configuration parameters.
         """
         self.model = model
+        self.device = config_params['device']
+        self.model.to(self.device)
         self.config_params = config_params
 
     def choose(self, x):
@@ -46,7 +48,7 @@ class Controller:
         Returns:
             action (numpy.ndarray): The action chosen by the model based on the current state.
         """
-        return self.model.act(th.tensor(x, dtype=th.float32)).detach().numpy()
+        return self.model.act(th.from_numpy(x).to(self.device)).cpu().detach().numpy()
 
     def get_deterministic_action(self, x):
         """
@@ -62,4 +64,4 @@ class Controller:
         Returns:
             action (numpy.ndarray): The deterministic action chosen by the model based on the current state.
         """
-        return self.model.get_deterministic_action(th.tensor(x, dtype=th.float32)).detach().numpy()
+        return self.model.get_deterministic_action(th.from_numpy(x).to(self.device)).cpu().detach().numpy()

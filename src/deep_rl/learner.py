@@ -39,6 +39,7 @@ class Learner:
             config_params (dict): A dictionary of configuration parameters.
         """
         self.model = model
+        self.model.to(config_params['device'])
         self.config_params = config_params
 
     def train(self, batch: ReplayBuffer):

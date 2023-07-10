@@ -261,7 +261,7 @@ class SACExperiment(Experiment):
 
         loss = []
         for _ in range(self.grad_repeats):
-            batch_buffer = self.replay_buffer.sample()
+            batch_buffer = self.replay_buffer.sample(device=self.config_params['device'])
             policy_loss, q1_loss, q2_loss, alpha_loss = self.learner.train(batch_buffer)
             loss.append([policy_loss, q1_loss, q2_loss, alpha_loss])
         return np.mean(loss, axis=0), np.std(loss, axis=0)

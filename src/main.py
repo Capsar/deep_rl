@@ -9,7 +9,7 @@ from src.deep_rl.model import GRUSoftActorCritic, SoftActorCritic, TransformerSo
 SAC_CONFIG_PARAMS_LUNAR = {
     "max_steps": int(1E5),
     "replay_buffer_size": int(1E4),
-    "batch_size": 128,
+    "batch_size": 1024*8,
     "runner_steps": 10,
     "gamma": 0.995,
     "grad_repeats": 5,
@@ -23,7 +23,7 @@ SAC_CONFIG_PARAMS_LUNAR = {
     "save_path": "./data/experiments_data/sac_lunarlander/",
     "render": True,
     "hidden_size": [64, 64],
-    "device": 'cpu'
+    "device": 'cuda'
 }
 
 SAC_CONFIG_PARAMS_PENDULUM = {

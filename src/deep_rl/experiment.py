@@ -12,7 +12,7 @@ from datetime import datetime
 import numpy as np
 import torch as th
 from cycler import cycler
-from gym import Env
+from gymnasium import Env
 
 from src.deep_rl import timed_decorator
 from src.deep_rl.learner import Learner, SoftActorCriticLearner
@@ -37,7 +37,6 @@ class MultiExperiment:
                                           'n_env_steps': (number_of_graph_points,),
                                           'n_episode_durations': (number_of_graph_points,)}
         self.experiments_buffer = ReplayBuffer(n, self.experiments_buffer_shapes)
-
         self.env = [env for _ in range(n)]
         self.models = [model_class(*model_constructor) for _ in range(n)]
         self.experiment_class = experiment_class
@@ -95,6 +94,7 @@ class MultiExperiment:
 class Experiment:
 
     def __init__(self, config_params, render_graphs=True):
+
         self.learner = None
         self.controller = None
         self.runner = None

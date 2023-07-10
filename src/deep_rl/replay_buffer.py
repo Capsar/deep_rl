@@ -16,7 +16,7 @@ class ReplayBuffer:
         position (int): Current position in the replay buffer.
         dict (dict): Dictionary storing the experiences.
     """
-    def __init__(self, buffer_size, shapes, batch_size=0):
+    def __init__(self, buffer_size, shapes, batch_size=0, device='cpu'):
         """
         Constructor for the ReplayBuffer class.
         
@@ -25,7 +25,7 @@ class ReplayBuffer:
             shapes (dict): The shapes of the data to be stored in the buffer. Keys are strings denoting data type (e.g., 'states', 'actions') and values are tuples representing data dimensions.
             batch_size (int, optional): The number of samples to return when 'sample' method is called. If not provided, no data will be returned by the 'sample' method.
         """
-        self.device = 'cuda' if th.cuda.is_available() else 'cpu'
+        self.device = device
         self.buffer_size = buffer_size
         self.shapes = shapes
         self.batch_size = batch_size

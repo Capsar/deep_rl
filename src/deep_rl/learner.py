@@ -65,7 +65,7 @@ class SoftActorCriticLearner(Learner):
 
     Attributes:
         model (SoftActorCritic): A Soft Actor-Critic model that learns from the batch of experiences.
-        device (str): The device on which to run the computations ('cuda' if available, else 'cpu').
+        device (str): The device on which to run the computations (defined in the config_params).
         tau (float): The rate at which to update the target network.
         entropy_target (float): The target for entropy maximization.
         log_alpha (th.Tensor): The log of alpha, used for entropy optimization.
@@ -84,9 +84,8 @@ class SoftActorCriticLearner(Learner):
             config_params (dict): A dictionary of configuration parameters.
         """
         super().__init__(model, config_params)
-        self.device = 'cuda' if th.cuda.is_available() else 'cpu'
+        self.device = config_params['device']
         self.tau = self.config_params['tau']
-
         # alpha, used for entropy optimization
         self.entropy_target = -np.prod(action_shape)
         self.log_alpha = th.tensor(np.log(self.config_params['alpha'])).to(self.device)

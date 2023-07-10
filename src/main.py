@@ -1,8 +1,7 @@
 import json
 
-import gym
+import gymnasium as gym
 import numpy as np
-import pandas as pd
 
 from src.deep_rl.experiment import SACExperiment, MultiExperiment
 from src.deep_rl.model import GRUSoftActorCritic, SoftActorCritic, TransformerSoftActorCritic, DLinearSoftActorCritic
@@ -23,7 +22,8 @@ SAC_CONFIG_PARAMS_LUNAR = {
     "print_every": 500,
     "save_path": "./data/experiments_data/sac_lunarlander/",
     "render": True,
-    "hidden_size": [64, 64]	
+    "hidden_size": [64, 64],
+    "device": 'cpu'
 }
 
 SAC_CONFIG_PARAMS_PENDULUM = {
@@ -42,13 +42,11 @@ SAC_CONFIG_PARAMS_PENDULUM = {
     "print_every": 1,
     "save_path": "./experiments_data/sac_pendulum/",
     "render": True,
-    "hidden_size": [32, 32]	
+    "hidden_size": [32, 32],
+    "device": 'cpu'
 }
 
 if __name__ == '__main__':
-    pd.set_option('display.max_rows', 10)
-    pd.set_option('display.max_columns', 10)
-    pd.set_option('display.width', 1000)
     np.set_printoptions(suppress=True, linewidth=np.nan)
 
     env = gym.make('LunarLanderContinuous-v2')

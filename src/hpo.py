@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 from src.deep_rl.experiment import SACExperiment, MultiExperiment
-from src.deep_rl.model import GRUSoftActorCritic, SoftActorCritic, TransformerSoftActorCritic, DLinearSoftActorCritic
+from src.deep_rl.sac_model import GRUSoftActorCritic, SoftActorCritic, TransformerSoftActorCritic, DLinearSoftActorCritic
 
 def grid_search_params(params_dict):
     """

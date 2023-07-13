@@ -4,7 +4,7 @@ import gymnasium as gym
 import numpy as np
 
 from src.deep_rl.experiment import SACExperiment, MultiExperiment
-from src.deep_rl.model import GRUSoftActorCritic, SoftActorCritic, TransformerSoftActorCritic, DLinearSoftActorCritic
+from src.deep_rl.sac_model import GRUSoftActorCritic, SoftActorCritic, TransformerSoftActorCritic, DLinearSoftActorCritic
 
 SAC_CONFIG_PARAMS_LUNAR = {
     "max_steps": int(1E5),
@@ -56,5 +56,5 @@ if __name__ == '__main__':
     SAC_Constructor = (obv_space, action_space, SAC_CONFIG_PARAMS_LUNAR['hidden_size'])
 
     print("Model constructor: ", SAC_Constructor)
-    multi_experiment = MultiExperiment(4, env, SACExperiment, SoftActorCritic, SAC_Constructor, SAC_CONFIG_PARAMS_LUNAR)
+    multi_experiment = MultiExperiment(1, env, SACExperiment, SoftActorCritic, SAC_Constructor, SAC_CONFIG_PARAMS_LUNAR)
     multi_experiment.run_experiments()

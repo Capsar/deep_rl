@@ -10,7 +10,7 @@ import numpy as np
 import torch as th
 import torch.nn.functional as F
 
-from src.deep_rl.model import SoftActorCritic
+from src.deep_rl.sac_model import SoftActorCritic
 from src.deep_rl.replay_buffer import ReplayBuffer
 
 

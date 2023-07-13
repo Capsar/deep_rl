@@ -22,7 +22,7 @@ class Controller:
         model (th.nn.Module): A PyTorch model that decides which action to take based on the current state.
         config_params (dict): A dictionary of configuration parameters.
     """
-    def __init__(self, model: th.nn.Module, config_params):
+    def __init__(self, model: th.nn.Module, config_params: dict):
         """
         Initializes the Controller with the given PyTorch model and configuration parameters.
 
@@ -31,9 +31,8 @@ class Controller:
             config_params (dict): A dictionary of configuration parameters.
         """
         self.model = model
-        self.device = config_params['device']
-        self.model.to(self.device)
         self.config_params = config_params
+        self.device = config_params['device']
 
     def choose(self, x):
         """

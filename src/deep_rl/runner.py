@@ -1,4 +1,6 @@
+from gymnasium import Env
 from src.deep_rl import timed_decorator
+from src.deep_rl.controller import Controller
 from src.deep_rl.replay_buffer import ReplayBuffer
 
 
@@ -22,7 +24,7 @@ class Runner:
         info_buffer_shapes (dict): A dictionary where the keys are info keys and the values are tuples indicating the
                                    shape of the corresponding data.
     """
-    def __init__(self, env, controller, config_params):
+    def __init__(self, env: Env, controller: Controller, config_params: dict):
         """
         Initializes the Runner with the given environment, controller, and configuration parameters.
 

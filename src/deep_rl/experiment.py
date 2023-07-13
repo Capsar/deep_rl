@@ -94,7 +94,6 @@ class MultiExperiment:
 class Experiment:
 
     def __init__(self, config_params, render_graphs=True):
-
         self.learner = None
         self.controller = None
         self.runner = None
@@ -241,6 +240,7 @@ class SACExperiment(Experiment):
 
     def __init__(self, env: Env, model: th.nn.Module, config_params):
         super().__init__(config_params)
+        model.to(config_params['device'])
         self.env = env
         self.learner = SoftActorCriticLearner(model, self.env.action_space.shape, config_params)
         self.controller = Controller(model, config_params)
@@ -250,7 +250,7 @@ class SACExperiment(Experiment):
                                      'rewards': (1,),
                                      'next_states': self.env.observation_space.shape,
                                      'dones': (1,)}
-        self.replay_buffer = ReplayBuffer(config_params['replay_buffer_size'], self.replay_buffer_shapes, config_params['batch_size'])
+        self.replay_buffer = ReplayBuffer(config_params['replay_buffer_size'], self.replay_buffer_shapes, config_params['batch_size'], config_params['device'])
         self.grad_repeats = config_params['grad_repeats']
 
     @timed_decorator
@@ -258,16 +258,19 @@ class SACExperiment(Experiment):
         self.replay_buffer.append(episodes_buffer)
         if len(self.replay_buffer) < self.replay_buffer.batch_size:
             return [0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0]
-
+        
         loss = []
         for _ in range(self.grad_repeats):
-            batch_buffer = self.replay_buffer.sample(device=self.config_params['device'])
+            batch_buffer = self.replay_buffer.sample()
             policy_loss, q1_loss, q2_loss, alpha_loss = self.learner.train(batch_buffer)
             loss.append([policy_loss, q1_loss, q2_loss, alpha_loss])
         return np.mean(loss, axis=0), np.std(loss, axis=0)
 
     def run(self):
-        step = 0
+        episode_buffer, _, _, _, runner_duration = self.runner.run_steps(step:=self.config_params['warmup_steps'])
+        self.replay_buffer.append(episode_buffer)
+        print(f"Warmed up replay buffer with {len(self.replay_buffer)} samples and took {runner_duration} seconds.")
+
         while step < self.config_params['max_steps']:
             episode_buffer, rollout_returns, rollout_lengths, rollout_infos, runner_duration = self.runner.run_steps(self.config_params['runner_steps'])
             episode_loss_mean, episode_loss_std, learn_duration = self._learn_from_episodes(episode_buffer)

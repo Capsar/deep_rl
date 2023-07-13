@@ -104,14 +104,14 @@ class ReplayBuffer:
             other = other.dict
         n = None
         for key, value in other.items():
-            self.add_value(key, value)
+            self.add_value(key, value.to(self.device))
             if n is None:
                 n = len(value)
             else:
                 assert n == len(value), 'Cannot append ReplayBuffer with different lengths'
         self.position += n
 
-    def sample(self, batch_size=None, device='cpu'):
+    def sample(self, batch_size=None):
         """
         Randomly samples experiences from the buffer. If a batch_size was provided when initializing the buffer and no batch_size is provided here, the initial batch_size is used.
 
@@ -124,9 +124,7 @@ class ReplayBuffer:
         if batch_size is None:
             batch_size = self.batch_size
         idx = th.randperm(len(self))[:batch_size]
-        sampled = ReplayBuffer(buffer_size=batch_size, shapes=self.shapes, batch_size=batch_size)
-        sampled.append({key: value[idx] for key, value in self.dict.items()})
-        return sampled.to_device(device)
+        return {key: value[idx] for key, value in self.dict.items()}
 
     def trim(self):
         """
@@ -148,14 +146,3 @@ class ReplayBuffer:
         """
         dict_to_np = {key: self.value_to_list(key) for key in self.dict.keys()}
         json.dump(dict_to_np, open(path, 'w'))
-
-    def to_device(self, device):
-        """
-        Moves the ReplayBuffer to a device.
-
-        Args:
-            device (str): The device to move the ReplayBuffer to.
-        """
-        for key, value in self.dict.items():
-            self.dict[key] = value.to(device)
-        return self

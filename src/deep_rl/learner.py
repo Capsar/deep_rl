@@ -39,7 +39,6 @@ class Learner:
             config_params (dict): A dictionary of configuration parameters.
         """
         self.model = model
-        self.model.to(config_params['device'])
         self.config_params = config_params
 
     def train(self, batch: ReplayBuffer):
@@ -96,6 +95,7 @@ class SoftActorCriticLearner(Learner):
         self.critic1_optimizer = th.optim.Adam(self.model.critic1.parameters(), lr=self.config_params['critic_lr'])
         self.critic2_optimizer = th.optim.Adam(self.model.critic2.parameters(), lr=self.config_params['critic_lr'])
 
+    @th.no_grad()
     def calc_q_target(self, batch: ReplayBuffer):
         """
         Calculates the Q-value targets for the given batch of experiences.
@@ -106,11 +106,10 @@ class SoftActorCriticLearner(Learner):
         Returns:
             targets (th.Tensor): The Q-value targets for the given batch of experiences.
         """
-        with th.no_grad():
-            next_action, next_log_pi = self.model.sample_log_prob(batch['next_states'])
-            entropy = self.log_alpha.exp() * next_log_pi.sum(dim=-1, keepdim=True)
-            t_q_values = th.min(*self.model.q_values(batch['next_states'], next_action, target=True))
-            targets = batch['rewards'] + self.config_params['gamma'] * (1. - batch['dones']) * (t_q_values - entropy)
+        next_action, next_log_pi = self.model.sample_log_prob(batch['next_states'])
+        entropy = self.log_alpha.exp() * next_log_pi.sum(dim=-1, keepdim=True)
+        t_q_values = th.min(*self.model.q_values(batch['next_states'], next_action, target=True))
+        targets = batch['rewards'] + self.config_params['gamma'] * (1. - batch['dones']) * (t_q_values - entropy)
         return targets
 
     def train(self, batch: ReplayBuffer):

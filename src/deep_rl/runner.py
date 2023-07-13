@@ -93,7 +93,7 @@ class Runner:
                 info_memory.store(**i)
             self.s = ns
             self.rewards[-1].append(r)
-            if d or t:
+            if d or t or len(self.rewards[-1]) == self.config_params['max_episode_steps'] - 1:
                 self.s, _ = self.env.reset()
                 self.rewards.append([])
         if len(self.rewards) > 1:
